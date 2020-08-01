@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>轮播图</title>
+        <style>
+            *{
+                padding: 0;
+                margin: 0;
+            }
+            .wrapper{
+                width: 800px;
+                height: 400px;
+                position: relative;
+                left: 50%;
+                text-align: center;
+                line-height: 400px;
+                margin-left: -400px;
+            }
+            .demo {
+                width: 800px;
+                height: 400px;
+                list-style: none;
+                position: relative;
+            }
+            .item {
+                opacity: 0;
+                transition: all 1s;
+                width: 100%;
+                height: 100%;
+                float: left;
+                color: aqua;
+                font-size: 100px;
+                position: absolute;
+            }
+            .itembtn {
+                background-color: antiquewhite;
+                width: 50px;
+                height: 50px;
+                z-index: 100;
+                position: absolute;
+                opacity: 0.3;
+                border: 0;
+                font-size: 40px;
+                line-height: 40px;
+                border-radius: 100%;
+                outline: none;
+            }
+            #left {
+                top: 160px;
+                left: 0px;
+            }
+            #right {
+                top: 160px;
+                right: 0px;
+            }
+            .item:nth-child(1){
+                background-color: cornflowerblue;
+            }
+            .item:nth-child(2) {
+                background-color: darkgoldenrod;
+            }
+            .item:nth-child(3) {
+                background-color: darkolivegreen;
+            }
+            .item:nth-child(4) {
+                background-color: darkorange;
+            }
+            .item:nth-child(5) {
+                background-color: darkslategrey;
+            }
+            .item.active {
+                z-index: 10;
+                opacity: 1;
+            }
+            .pointlist {
+                padding-left: 0;
+                position: absolute;
+                right: 10px;
+                bottom: 10px;
+                list-style: none;
+                z-index: 10000;
+            }
+            .point {
+                width: 8px;
+                height: 8px;
+                float: left;
+                border: 2px solid cornsilk;
+                margin-right: 20px;
+                border-radius: 100%;
+                cursor: pointer;
+            }
+            .point.active {
+                background-color: black;
+            }
+        </style>
+        
+    </head>
+    <body>
+        <div class="wrapper">
+            <ul class="demo">
+                <li class="item active">0</li>
+                <li class="item">1</li>
+                <li class="item">2</li>
+                <li class="item">3</li>
+                <li class="item">4</li>
+            </ul>
+            <ul class="pointlist">
+                <li class="point active" data-index = "0"></li>
+                <li class="point" data-index = "1"></li>
+                <li class="point" data-index = "2"></li>
+                <li class="point" data-index = "3"></li>
+                <li class="point" data-index = "4"></li>
+            </ul>
+            <button id="left" class="itembtn"><</button>
+            <button id="right" class="itembtn">></button>
+        </div>
+        <script>
+            var items = document.getElementsByClassName("item");
+            var btnL = document.getElementById("left");
+            var btnR = document.getElementById("right");
+            var points = document.getElementsByClassName("point");
+            var index = 0;
+            var clearActive = function() {
+                for(i = 0;i < items.length;i++) {
+                    items[i].className = "item";
+                    points[i].className = "point";
+                }
+            }
+            var goIndex = function() {
+                clearActive();
+                items[index].className = "item active";
+                points[index].className = "point active"
+            }
+            var goPre = function() {
+                if(index == 0) {
+                    index = 4;
+                }else {
+                    index--;
+                }
+                goIndex();
+            }
+            var goNext = function() {
+                if(index < 4){
+                    index ++;
+                }else {
+                    index = 0;
+                }
+                goIndex(); 
+            }
+            var timer = setInterval(function(){
+                goNext();
+            },2000);
+            btnL.addEventListener("click",function(){
+                goPre();
+                clearInterval(timer);
+            });
+            btnR.addEventListener("click",function(){
+                goNext();
+                clearInterval(timer);
+            })
+            for(i = 0;i<points.length;i++){
+                points[i].addEventListener("click", function(){
+                    var pointIndex = this.getAttribute('data-index');
+                    index = pointIndex;
+                    goIndex();
+                    clearInterval(timer);
+                })
+            }
+        </script>
+    </body>
+</html>
